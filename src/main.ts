@@ -29,6 +29,9 @@ const tileSize = gridCanvas.width / numTiles;
 const numSelectables = imageUrls.length;
 const selectHeight = selectCanvas.height / numSelectables;
 
+//note: trying to implement this class?? not sure how to go about it
+//but there are things not working
+
 //create a flyweight class
 class TileFlyweight {
   private image: HTMLImageElement;
@@ -87,7 +90,9 @@ function drawTexture(
   tile: TileFlyweight,
   cellSize: number
 ) {
+  //image.onload = () => { //figure this out, this is why the image doesn't load without clicking
   tile.draw(ctx, row * cellSize, col * cellSize, cellSize, cellSize);
+  // }
 }
 
 // ----- Interacting with the main tilemap -----
@@ -101,17 +106,6 @@ function redrawTilemap() {
     }
   }
 }
-
-gridCanvas.addEventListener("click", (e) => {
-  const coordX = Math.trunc(e.offsetX / tileSize);
-  const coordY = Math.trunc(e.offsetY / tileSize);
-
-  // tilemap[coordX][coordY].src = currentTile;
-  tilemap[coordX][coordY] = new TileFlyweight(currentTile);
-  redrawTilemap();
-});
-
-// ----- Interacting with the selectable tilemap -----
 
 // Loop through the selectable tiles and draw textures in each cell
 function drawSelectCanvas() {
@@ -128,6 +122,15 @@ function drawSelectCanvas() {
     );
   }
 }
+
+gridCanvas.addEventListener("click", (e) => {
+  const coordX = Math.trunc(e.offsetX / tileSize);
+  const coordY = Math.trunc(e.offsetY / tileSize);
+
+  // tilemap[coordX][coordY].src = currentTile;
+  tilemap[coordX][coordY] = new TileFlyweight(currentTile);
+  redrawTilemap();
+});
 
 selectCanvas.addEventListener("click", (e) => {
   const coordY = Math.trunc(e.offsetY / selectHeight);
